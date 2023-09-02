@@ -19,9 +19,9 @@ function Todos() {
   console.log(todos);
 
   return (
-    <ul>
+    <ul className="fixed top-[150px] ">
       {filterTodos.map((todo) => (
-        <li key={todo.id}>
+        <li key={todo.id} className="mt-3 space-x-2">
           <input
             type="checkbox"
             name=""
@@ -29,12 +29,17 @@ function Todos() {
             checked={todo.completed}
             onChange={() => toggleTodoAsCompleted(todo.id)}
           />
-          <label htmlFor={`todo-${todo.id}`}>{todo.task}</label>
+          <label
+            className={`${todo.completed ? "line-through" : ""}`}
+            htmlFor={`todo-${todo.id}`}
+          >
+            {todo.task}
+          </label>
 
           {todo.completed && (
             <button
               type="button"
-              className="bg-gray-400 p-2   rounded-lg"
+              className="bg-red-500/20 hover:bg-red-500 p-2   rounded-lg"
               onClick={() => handleTodoDelete(todo.id)}
             >
               Delete

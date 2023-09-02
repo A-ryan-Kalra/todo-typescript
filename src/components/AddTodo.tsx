@@ -9,7 +9,7 @@ export default function AddTodo() {
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    handleAddTodo(todo);
+    if (todo.trim()) handleAddTodo(todo);
     setTodo("");
   };
 
