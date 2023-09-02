@@ -13,13 +13,17 @@ export type TodosContext = {
   todos: Todo[];
   handleAddTodo: (task: string) => void;
   toggleTodoAsCompleted: (id: string) => void;
+  handleTodoDelete: (id: string) => void;
 };
 
 export const todosContext = createContext<TodosContext | null>(null);
 
 export const TodosProvider = ({ children }: { children: ReactNode }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  // console.log(todos);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const newTodos = localStorage.getItem("todos") || "[]";
+    return JSON.parse(newTodos) as Todo[];
+  });
+
   const handleAddTodo = (task: string) => {
     setTodos((prev) => {
       const newTodos: Todo[] = [
@@ -31,14 +35,34 @@ export const TodosProvider = ({ children }: { children: ReactNode }) => {
         },
         ...prev,
       ];
+      localStorage.setItem("todos", JSON.stringify(newTodos));
       return newTodos;
     });
-    // console.log(todos);
   };
-  const toggleTodoAsCompleted = (id: string) => {};
+  const toggleTodoAsCompleted = (id: string) => {
+    setTodos((prev) => {
+      const newTodos = prev.map((task) => {
+        if (task.id === id) {
+          return { ...task, completed: !task.completed };
+        }
+        return task;
+      });
+      localStorage.setItem("todos", JSON.stringify(newTodos));
+
+      return newTodos;
+    });
+  };
+  const handleTodoDelete = (id: string) => {
+    setTodos((prev) => {
+      const newTodos = prev.filter((task) => task.id !== id);
+      localStorage.setItem("todos", JSON.stringify(newTodos));
+
+      return newTodos;
+    });
+  };
   return (
     <todosContext.Provider
-      value={{ todos, handleAddTodo, toggleTodoAsCompleted }}
+      value={{ todos, handleAddTodo, toggleTodoAsCompleted, handleTodoDelete }}
     >
       {children}
     </todosContext.Provider>

@@ -18,10 +18,16 @@ export default function AddTodo() {
       <input
         type="text"
         placeholder="Add something"
+        className="outline-none p-2 rounded-lg shadow-md focus:ring-2 focu"
         value={todo}
         onChange={(e) => setTodo(e.target.value)}
       />
-      <button type="submit">ADD</button>
+      <button
+        className="p-2 rounded-lg shadow-md ml-2 hover:bg-black/10 "
+        type="submit"
+      >
+        ADD
+      </button>
     </form>
   );
 }
